@@ -13,8 +13,8 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 
-import org.aftersong.modules.logging.Log;
-import org.aftersong.modules.logging.Logger;
+import org.aftersong.logging.Log;
+import org.aftersong.logging.Logger;
 import org.aftersong.pixie.events.ImageChangedEvent;
 import org.aftersong.pixie.image.ImageResource;
 import org.aftersong.pixie.image.ImageResourceMetaData;

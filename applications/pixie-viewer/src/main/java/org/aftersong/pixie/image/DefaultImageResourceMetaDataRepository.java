@@ -25,9 +25,9 @@ import javax.xml.bind.annotation.XmlElementRef;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import org.aftersong.modules.collections.Lists;
-import org.aftersong.modules.collections.Maps;
-import org.aftersong.modules.collections.Objects;
+import org.aftersong.collections.Lists;
+import org.aftersong.collections.Maps;
+import org.aftersong.collections.Objects;
 
 /**
  *

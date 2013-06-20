@@ -9,8 +9,9 @@ import java.util.List;
 import java.util.Map;
 
 import javax.inject.Inject;
-import org.aftersong.modules.collections.Lists;
-import org.aftersong.modules.collections.Maps;
+
+import org.aftersong.collections.Lists;
+import org.aftersong.collections.Maps;
 import org.aftersong.pixie.image.ImageResource;
 import org.aftersong.pixie.image.ImageResourceRepository;
 import org.springframework.stereotype.Component;

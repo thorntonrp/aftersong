@@ -20,10 +20,10 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipException;
 import java.util.zip.ZipFile;
 
-import org.aftersong.modules.collections.Lists;
-import org.aftersong.modules.collections.Sets;
-import org.aftersong.modules.logging.Log;
-import org.aftersong.modules.logging.Logger;
+import org.aftersong.collections.Lists;
+import org.aftersong.collections.Sets;
+import org.aftersong.logging.Log;
+import org.aftersong.logging.Logger;
 
 /**
  *
