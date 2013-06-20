@@ -1,0 +1,14 @@
+/collections/target/
+/core/target/
+/io/target/
+/javafx/target/
+/logging/target/
+/swing/target/
+/validation/target/
+/applications/pixie-explorer/target/
+/applications/pixie-viewer/target/
+/examples/basic-app/target/
+/examples/javafx-app/target/
+/examples/javafx-fxml-app/target/
+/examples/launcher-app/target/
+/examples/spring-app/target/

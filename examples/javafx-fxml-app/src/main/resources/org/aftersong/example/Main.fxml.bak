@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.lang.* ?>
+<?import java.util.* ?>
+<?import javafx.scene.* ?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.control.* ?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.image.* ?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.* ?>
+
+<?scenebuilder-classpath-element ../../../../../../target/classes?>
+
+<AnchorPane fx:id="rootPane" id="AnchorPane" prefHeight="538.0" prefWidth="931.0" style="-fx-background-color: #A0A0C0" xmlns:fx="http://javafx.com/fxml" fx:controller="org.aftersong.example.MainController">
+	<children>
+		<VBox fx:id="leftPane" fillWidth="true" style="-fx-background-color: #EFEFEFFF;"  AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0" onMouseEntered="#show" onMouseExited="#hide">
+			<ImageView>
+				<image>
+					<Image url="org/aftersong/example/icon-256.png" />
+				</image>
+			</ImageView>
+		</VBox>
+		<VBox fx:id="rightPane" fillWidth="true" style="-fx-background-color: #EFEFEFFF;" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" onMouseEntered="#show" onMouseExited="#hide">
+			<ImageView>
+				<image>
+					<Image url="org/aftersong/example/icon-256.png" />
+				</image>
+			</ImageView>
+		</VBox>
+		<HBox fx:id="topPane" fillHeight="true" style="-fx-background-color: #EFEFEFFF;" AnchorPane.rightAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0" onMouseEntered="#show" onMouseExited="#hide">
+			<ImageView>
+				<image>
+					<Image url="org/aftersong/example/icon-256.png" />
+				</image>
+			</ImageView>
+		</HBox>
+		<HBox fx:id="bottomPane" fillHeight="true" style="-fx-background-color: #EFEFEFFF;" AnchorPane.rightAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.bottomAnchor="0.0" onMouseEntered="#show" onMouseExited="#hide">
+			<ImageView>
+				<image>
+					<Image url="org/aftersong/example/icon-256.png" />
+				</image>
+			</ImageView>
+		</HBox>
+	</children>
+</AnchorPane>
