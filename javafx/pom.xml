@@ -20,10 +20,14 @@
 
 	<dependencies>
 		<dependency>
+			<groupId>com.oracle</groupId>
+			<artifactId>jfxrt</artifactId>
+		</dependency><!--
+		<dependency>
 			<groupId>org.aftersong</groupId>
 			<artifactId>aftersong-logging</artifactId>
 			<version>${platformVersion}</version>
-		</dependency>
+		</dependency>-->
 		<dependency>
 			<groupId>org.testng</groupId>
 			<artifactId>testng</artifactId>

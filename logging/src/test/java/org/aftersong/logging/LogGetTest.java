@@ -16,7 +16,7 @@ import org.testng.annotations.Test;
  * @author Robert P. Thornton
  */
 public class LogGetTest {
-/*
+
 	@BeforeClass
 	public void initializeLogging() {
 		Log.initializeLogging();
@@ -24,22 +24,22 @@ public class LogGetTest {
 
 	@Test
 	public void test_get_byCallingClass() {
-		Log log = Log.get();
+		Log log = Log.getLogger();
 		assertEquals(log.getEffectiveLevel(), Level.FINEST);
 		assertEquals(log.getName(), LogGetTest.class.getName());
 	}
 
 	@Test
 	public void test_get_byClass() {
-		Log log = Log.get(LogGetTest.class);
+		Log log = Log.getLogger(LogGetTest.class);
 		assertEquals(log.getEffectiveLevel(), Level.FINEST);
 		assertEquals(log.getName(), LogGetTest.class.getName());
 	}
 
 	@Test
 	public void test_get_byName() {
-		Log log = Log.get(LogGetTest.class.getName());
+		Log log = Log.getLogger(LogGetTest.class.getName());
 		assertEquals(log.getEffectiveLevel(), Level.FINEST);
 		assertEquals(log.getName(), LogGetTest.class.getName());
-	}*/
+	}
 }

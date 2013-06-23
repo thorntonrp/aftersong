@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.net.*?>
+<?import java.util.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import org.aftersong.javafx.*?>
+
+<?scenebuilder-classpath-element ../../../../../../../target/classes?>
+<?scenebuilder-classpath-element ../../../../../../../../../../modules/logging/trunk/target/module-logging-1.0-SNAPSHOT.jar?>
+
+<?scenebuilder-stylesheet Main.css?>
+
+<SlidingBorderPane id="root" xmlns:fx="http://javafx.com/fxml" fx:controller="org.aftersong.javafx.TransformsTest$Controller">
+	<left>
+		<Label text="Test Test Test Test" />
+	</left>
+	<right>
+		<Label text="Test Test Test Test" />
+	</right>
+	<top>
+		<Label text="Test&#10;Test&#10;Test&#10;Test" />
+	</top>
+	<bottom>
+		<Label text="Test&#10;Test&#10;Test&#10;Test" />
+	</bottom>
+	<children>
+		<ImageView fx:id="imageView" />
+	</children>
+</SlidingBorderPane>

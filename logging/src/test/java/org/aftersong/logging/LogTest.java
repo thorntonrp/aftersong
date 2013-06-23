@@ -4,11 +4,16 @@
  */
 package org.aftersong.logging;
 
+import static org.testng.Assert.*;
 
 import java.text.MessageFormat;
+import java.util.logging.Level;
 import java.util.logging.LogRecord;
 
-
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeClass;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
 
 /**
  *
@@ -20,7 +25,7 @@ public class LogTest {
 	private final Throwable thrown = new Throwable();
 
 	private Logger log;
-/*
+
 	@BeforeClass
 	public void initializeLogging() {
 		Log.initializeLogging();
@@ -28,7 +33,7 @@ public class LogTest {
 
 	@BeforeMethod
 	public void beforeMethod() {
-		log = Log.get();
+		log = Log.getLogger();
 		log.getDelegate().setLevel(Level.ALL);
 		log.getDelegate().addHandler(handler);
 	}
@@ -113,7 +118,7 @@ public class LogTest {
 		log.severe("test {0} {1} {2}", thrown, 1, 2, 3);
 		assertEquals(handler.getFormattedMessage(), "test 1 2 3");
 		assertEquals(handler.getThrown(), thrown);
-	}*/
+	}
 
 	private static class LogHandler extends java.util.logging.Handler {
 
