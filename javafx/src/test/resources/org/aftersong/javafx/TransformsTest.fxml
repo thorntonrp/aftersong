@@ -29,7 +29,7 @@
 	<bottom>
 		<Label text="Test&#10;Test&#10;Test&#10;Test" />
 	</bottom>
-	<children>
+	<center>
 		<ImageView fx:id="imageView" />
-	</children>
+	</center>
 </SlidingBorderPane>

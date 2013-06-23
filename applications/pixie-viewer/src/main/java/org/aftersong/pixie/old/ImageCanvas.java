@@ -2,62 +2,63 @@
  * Copyright 2013 Robert P. Thornton. All rights reserved.
  * This notice may not be removed.
  */
-package org.aftersong.pixie;
+package org.aftersong.pixie.old;
 
 import java.util.concurrent.ExecutorService;
 
 import javafx.application.Platform;
 import javafx.geometry.Bounds;
-import javafx.scene.canvas.Canvas;
-import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
-import javafx.scene.paint.Color;
+import javafx.scene.image.ImageView;
 
+import org.aftersong.javafx.Transforms;
 import org.aftersong.logging.Log;
 import org.aftersong.logging.Logger;
+import org.aftersong.pixie.PixieModel;
 import org.aftersong.pixie.events.ImageChangedEvent;
 import org.aftersong.pixie.image.ImageResource;
 import org.aftersong.pixie.image.ImageResourceMetaData;
 import org.aftersong.pixie.image.ImageResourceMetaDataRepository;
-import org.aftersong.pixie.image.ImageResourceRepository;
 
 /**
  *
  * @author Robert P. Thornton
  */
-public class ImageCanvas extends Canvas {
+class ImageCanvas extends ImageView {
 
 	private static final Logger LOG = Log.getLogger();
 
 	private static final double SCALE_FACTOR = 1.075;
 
-	private static final double ROTATION_UNITS = 1;
+	private static ImageCanvas instance;
 
+	public static ImageCanvas getInstance() {
+		if (instance == null) {
+			instance = new ImageCanvas();
+			Transforms.enableDrag(instance);
+			Transforms.enableZoom(instance);
+			Transforms.enableRotate(instance);
+		}
+		return instance;
+	}
+
+	private final PixieModel model;
 	private ExecutorService executor;
-
-	private Image image;
-
-	private ImageCanvasModel model;
 	private ImageResourceMetaDataRepository metaDataRepository;
 
-	public ImageCanvas() {
-	}
+	private ImageCanvas() {
+		model = new PixieModel();
+		Platform.runLater(new Runnable() {
+			@Override
+			public void run() {
 
-	public void setImageResourceMetaDataRepository(ImageResourceMetaDataRepository metaDataRepository) {
-		this.metaDataRepository = metaDataRepository;
-	}
-
-	public void setModel(ImageCanvasModel model) {
-		this.model = model;
-	}
-
-	public void setExecutorService(ExecutorService executor) {
-		this.executor = executor;
+			}
+		});
 	}
 
 	//-- Image Loading -------------------------------------------------------//
 
-	public void refreshImage() {
+	public void loadCurrentImage() {
 		queueLoadImageTask(model.current());
 	}
 
@@ -81,70 +82,13 @@ public class ImageCanvas extends Canvas {
 		queueLoadImageTask(model.previousFolder());
 	}
 
-	//-- Image Manipulation --------------------------------------------------//
-
-	public void scaleImageUp() {
-		ImageResource imageResource = model.get();
-		ImageResourceMetaData metaData = getMetaData(imageResource);
-		double newScale = metaData.getScale() * SCALE_FACTOR;
-		if (newScale < 20) {
-			scaleImage(imageResource, newScale);
-		}
-	}
-
-	public void scaleImageDown() {
-		ImageResource imageResource = model.get();
-		ImageResourceMetaData metaData = getMetaData(imageResource);
-		double newScale = metaData.getScale() / SCALE_FACTOR;
-		if (newScale > 0.05) {
-			scaleImage(imageResource, newScale);
-		}
-	}
-
-	public void rotateLeft() {
-		ImageResourceMetaData metaData = getMetaData();
-		double rotation = metaData.getRotationAngle() - ROTATION_UNITS;
-		metaData.setRotationAngle(rotation);
-		metaData.setManuallyEdited(true);
-		setRotate(rotation);
-	}
-
-	public void rotateRight() {
-		ImageResourceMetaData metaData = getMetaData();
-		double rotation = metaData.getRotationAngle() + ROTATION_UNITS;
-		metaData.setRotationAngle(rotation);
-		metaData.setManuallyEdited(true);
-		setRotate(rotation);
-	}
-
-	public void moveImage(double x, double y) {
-		getMetaData().setOffsetX(x);
-		getMetaData().setOffsetY(y);
-//		setTranslateX(x);
-//		setTranslateY(y);
-//		relocate(x, y);
-//		getParent().layout();
-	}
-
 	//-- Private Operations --------------------------------------------------//
-
-	private ImageResourceMetaData getMetaData() {
-		return getMetaData(model.get());
-	}
 
 	private ImageResourceMetaData getMetaData(ImageResource imageResource) {
 		if (imageResource.getMetaData() == null) {
 			imageResource.setMetaData(metaDataRepository.getImageResourceMetaData(imageResource.getImageUri()));
 		}
 		return imageResource.getMetaData();
-	}
-
-	private void scaleImage(ImageResource imageResource, double newScale) {
-		imageResource.getMetaData().setScale(newScale);
-		imageResource.getMetaData().setManuallyEdited(true);
-		setScaleX(newScale);
-		setScaleY(newScale);
-		fireEvent(new ImageChangedEvent(this, this, ImageChangedEvent.IMAGE_CHANGED, imageResource));
 	}
 
 	private void queueLoadImageTask(final int newIndex) {
@@ -195,21 +139,10 @@ public class ImageCanvas extends Canvas {
 	// Invoked on the JavaFX Event Queue
 	private void updateImage(int newIndex, Image newImage) {
 		ImageResource imageResource = model.get(newIndex);
-		image = newImage;
-//		relocate(imageResource.getMetaData().getOffsetX(),
-//				 imageResource.getMetaData().getOffsetX());
-		setWidth(newImage.getWidth());
-		setHeight(newImage.getHeight());
-//		setScaleX(imageResource.getMetaData().getScale());
-//		setScaleY(imageResource.getMetaData().getScale());
-//		setRotate(imageResource.getMetaData().getRotationAngle());
-		drawImage();
+		setImage(newImage);
+		setFitWidth(newImage.getWidth());
+		setFitHeight(newImage.getHeight());
 		fireEvent(new ImageChangedEvent(this, this, ImageChangedEvent.IMAGE_CHANGED, imageResource));
-	}
-
-	public void drawImage() {
-		GraphicsContext gc = getGraphicsContext2D();
-		gc.drawImage(image, 0, 0, image.getWidth(), image.getHeight(), 0, 0, getWidth(), getHeight());
 	}
 
 	private class Rect {

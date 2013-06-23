@@ -4,7 +4,9 @@
  */
 package org.aftersong.javafx;
 
+import javafx.geometry.Bounds;
 import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.RotateEvent;
 import javafx.scene.input.ScrollEvent;
@@ -17,6 +19,18 @@ import javafx.scene.input.ZoomEvent;
 public class Transforms {
 
 	private Transforms() {}
+
+	public static void centerInParent(Node node) {
+		Parent parent = node.getParent();
+
+		Bounds parentBounds = parent.getBoundsInLocal();
+		Bounds nodeBounds = node.getBoundsInLocal();
+		double x = (parentBounds.getWidth() - nodeBounds.getWidth()) / 2;
+		double y = (parentBounds.getHeight() - nodeBounds.getHeight()) / 2;
+
+		node.setLayoutX(x);
+		node.setLayoutY(y);
+	}
 
 	public static void enableDrag(Node node) {
 		new MouseMotionHandler()

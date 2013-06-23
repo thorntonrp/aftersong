@@ -12,9 +12,9 @@ import javafx.scene.layout.Pane;
  *
  * @author Robert P. Thornton
  */
-public class PixieApplicationPane extends Pane {
+public class PixieMenuPane extends Pane {
 
-	public PixieApplicationPane() {
+	public PixieMenuPane() {
 		getChildren().add(createExampleTextLabel("Pixie Application Pane"));
 	}
 

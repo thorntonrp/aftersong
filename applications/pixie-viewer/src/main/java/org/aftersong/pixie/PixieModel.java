@@ -8,20 +8,16 @@ import java.nio.file.Path;
 import java.util.List;
 import java.util.Map;
 
-import javax.inject.Inject;
-
 import org.aftersong.collections.Lists;
 import org.aftersong.collections.Maps;
+import org.aftersong.pixie.image.DefaultImageResourceRepository;
 import org.aftersong.pixie.image.ImageResource;
-import org.aftersong.pixie.image.ImageResourceRepository;
-import org.springframework.stereotype.Component;
 
 /**
  *
  * @author Robert P. Thornton
  */
-@Component
-public class ImageCanvasModel {
+public class PixieModel {
 
 	private final List<ImageResource> imageResources;
 	private final Map<ImageResource, Integer> imageResourceIndices;
@@ -32,9 +28,9 @@ public class ImageCanvasModel {
 
 	private int current = -1;
 
-	@Inject
-	public ImageCanvasModel(ImageResourceRepository imageResourceRepository) {
-		imageResources = Lists.newList(imageResourceRepository.getImageResources());
+	public PixieModel() {
+		DefaultImageResourceRepository repository = new DefaultImageResourceRepository();
+		imageResources = Lists.newList(repository.getImageResources());
 		size = imageResources.size();
 		last = size - 1;
 		imageResourceIndices = Maps.newMap();

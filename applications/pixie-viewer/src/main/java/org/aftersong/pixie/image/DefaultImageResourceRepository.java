@@ -14,19 +14,17 @@ import java.util.List;
  */
 public class DefaultImageResourceRepository implements ImageResourceRepository {
 
-	private ImageResourceScanner scanner;
+	private DefaultImageResourceScanner scanner;
 	private Path baseImagePath;
 
 	public DefaultImageResourceRepository() {
 		baseImagePath = Paths.get(System.getProperty("user.home"), "Pictures");
+		scanner = new DefaultImageResourceScanner();
+		scanner.setFileExtensions(".jpg", ".png", ".bmp", ".gif", ".jpeg");
 	}
 
 	@Override
 	public List<ImageResource> getImageResources() {
 		return scanner.scanFileSystem(baseImagePath);
-	}
-
-	public void setImageResourceScanner(ImageResourceScanner imageResourceScanner) {
-		this.scanner = imageResourceScanner;
 	}
 }

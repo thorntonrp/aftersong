@@ -15,6 +15,7 @@ import javafx.scene.Node;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.util.Duration;
@@ -31,11 +32,13 @@ public class SlidingBorderPane extends AnchorPane {
 	private ObjectProperty<Node> right;
 	private ObjectProperty<Node> top;
 	private ObjectProperty<Node> bottom;
+	private ObjectProperty<Node> center;
 
 	private VBox leftPane;
 	private VBox rightPane;
 	private HBox topPane;
 	private HBox bottomPane;
+	private Pane centerPane;
 
 	private final MouseEnteredHandler mouseEnteredHandler;
 	private final MouseExitedHandler mouseExitedHandler;
@@ -44,15 +47,17 @@ public class SlidingBorderPane extends AnchorPane {
 		mouseEnteredHandler = new MouseEnteredHandler();
 		mouseExitedHandler = new MouseExitedHandler();
 
-		leftPane = new VBox(10);
-		rightPane = new VBox(10);
-		topPane = new HBox(10);
+		leftPane   = new VBox(10);
+		rightPane  = new VBox(10);
+		topPane    = new HBox(10);
 		bottomPane = new HBox(10);
+		centerPane = new Pane();
 
-		add(leftPane, 0d, 0d, 0d, null);
-		add(topPane, 0d, 0d, null, 0d);
-		add(rightPane, 0d, null, 0d, 0d);
-		add(bottomPane, null, 0d, 0d, 0d);
+		add(leftPane,    true,   0d,   0d,   0d, null);
+		add(topPane,     true,   0d,   0d, null,   0d);
+		add(rightPane,   true,   0d, null,   0d,   0d);
+		add(bottomPane,  true, null,   0d,   0d,   0d);
+		add(centerPane, false,   0d,   0d,   0d,   0d);
 
 		Platform.runLater(new Runnable() {
 			@Override
@@ -61,6 +66,7 @@ public class SlidingBorderPane extends AnchorPane {
 				rightPane.setTranslateX(rightPane.getWidth() - MARGIN);
 				topPane.setTranslateY(-topPane.getHeight() + MARGIN);
 				bottomPane.setTranslateY(topPane.getHeight() - MARGIN);
+				Transforms.centerInParent(center.get());
 				makeTransparent(leftPane, rightPane, topPane, bottomPane);
 			}
 		});
@@ -94,8 +100,15 @@ public class SlidingBorderPane extends AnchorPane {
 		return bottom;
 	}
 
+	public ObjectProperty<Node> centerProperty() {
+		if (center == null) {
+			center = createBorderNodeProperty("center");
+		}
+		return center;
+	}
+
 	public Node getLeft() {
-		return left.get();
+		return leftProperty().get();
 	}
 
 	public void setLeft(Node node) {
@@ -103,7 +116,7 @@ public class SlidingBorderPane extends AnchorPane {
 	}
 
 	public Node getRight() {
-		return right.get();
+		return rightProperty().get();
 	}
 
 	public void setRight(Node node) {
@@ -111,7 +124,7 @@ public class SlidingBorderPane extends AnchorPane {
 	}
 
 	public Node getTop() {
-		return top.get();
+		return topProperty().get();
 	}
 
 	public void setTop(Node node) {
@@ -119,11 +132,19 @@ public class SlidingBorderPane extends AnchorPane {
 	}
 
 	public Node getBottom() {
-		return bottom.get();
+		return bottomProperty().get();
 	}
 
 	public void setBottom(Node node) {
 		bottomProperty().set(node);
+	}
+
+	public Node getCenter() {
+		return centerProperty().get();
+	}
+
+	public void setCenter(Node node) {
+		centerProperty().set(node);
 	}
 
 	private void makeTransparent(Node... nodes) {
@@ -140,10 +161,12 @@ public class SlidingBorderPane extends AnchorPane {
 		}
 	}
 
-	private void add(Node node, Double top, Double left, Double bottom, Double right) {
+	private void add(Node node, boolean sliding, Double top, Double left, Double bottom, Double right) {
 		getChildren().add(node);
-		mouseEnteredHandler.appendTo(node.onMouseEnteredProperty());
-		mouseExitedHandler.appendTo(node.onMouseExitedProperty());
+		if (sliding) {
+			mouseEnteredHandler.appendTo(node.onMouseEnteredProperty());
+			mouseExitedHandler.appendTo(node.onMouseExitedProperty());
+		}
 		if (top != null) {
 			AnchorPane.setTopAnchor(node, top);
 		}
@@ -247,6 +270,10 @@ public class SlidingBorderPane extends AnchorPane {
 						bottomPane.getChildren().add(node);
 						HBox.setMargin(node, new Insets(MARGIN, MARGIN, MARGIN, MARGIN));
 						HBox.setHgrow(node, Priority.ALWAYS);
+						break;
+					case "center":
+						centerPane.getChildren().clear();
+						centerPane.getChildren().add(node);
 						break;
 				}
 				super.set(node);

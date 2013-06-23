@@ -18,9 +18,9 @@
 	<url>http://maven.apache.org</url>
 
 	<properties>
-		<mainClass>org.aftersong.pixie.MainTest1</mainClass>
+		<mainClass>org.aftersong.pixie.PixieApplication</mainClass>
 		<jvmProperties>-Djava.util.logging.config.file=src/test/resources/logging.properties</jvmProperties>
-		<jvmArgs>-Xms128m -Xmx384m -XX:+UseG1GC</jvmArgs>
+		<jvmArgs>-Xms192m -Xmx384m -XX:+UseG1GC</jvmArgs>
 	 <netbeans.hint.jdkPlatform>JDK_1.7</netbeans.hint.jdkPlatform>
 	</properties>
 
