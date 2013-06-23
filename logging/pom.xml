@@ -19,7 +19,7 @@
 		<dependency>
 			<groupId>org.aftersong</groupId>
 			<artifactId>aftersong-core</artifactId>
-			<version>${project.parent.version}</version>
+			<version>${platformVersion}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.testng</groupId>

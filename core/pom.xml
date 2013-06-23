@@ -20,11 +20,6 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>org.aftersong</groupId>
-			<artifactId>aftersong-logging</artifactId>
-			<version>${platformVersion}</version>
-		</dependency>
-		<dependency>
 			<groupId>org.testng</groupId>
 			<artifactId>testng</artifactId>
 		</dependency>
