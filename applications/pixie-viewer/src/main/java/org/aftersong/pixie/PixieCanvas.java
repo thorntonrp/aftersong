@@ -118,15 +118,15 @@ public class PixieCanvas extends ImageView {
 	}
 
 	private void centerInParent(int index, BoundingRect newBounds) {
-		PixieRootPane root = (PixieRootPane) getParent();
+//		PixieRootPane root = (PixieRootPane) getParent();
 
-		double x = (root.getWidth() - newBounds.getWidth()) / 2;
-		double y = (root.getHeight() - newBounds.getHeight()) / 2;
+//		double x = (root.getWidth() - newBounds.getWidth()) / 2;
+//		double y = (root.getHeight() - newBounds.getHeight()) / 2;
 
-		setLayoutX(x);
-		setLayoutY(y);
+//		setLayoutX(x);
+//		setLayoutY(y);
 
-		LOG.info("Centered image: #{0,Number,#} ({1,Number,#}, {2,Number,#}, {3,Number,#}, {4,Number,#})", index, x, y, newBounds.getWidth(), newBounds.getHeight());
+//		LOG.info("Centered image: #{0,Number,#} ({1,Number,#}, {2,Number,#}, {3,Number,#}, {4,Number,#})", index, x, y, newBounds.getWidth(), newBounds.getHeight());
 	}
 
 	private static class BoundingRect {

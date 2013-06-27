@@ -17,11 +17,6 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>org.aftersong</groupId>
-			<artifactId>aftersong-core</artifactId>
-			<version>${platformVersion}</version>
-		</dependency>
-		<dependency>
 			<groupId>org.testng</groupId>
 			<artifactId>testng</artifactId>
 		</dependency>

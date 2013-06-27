@@ -1,0 +1,19 @@
+#rootPane {
+	-fx-background-color: #1A1A33;
+/*	-fx-background-color: radial-gradient(focus-angle 90, focus-distance 100%, center 50% 50%, radius 50%, #CDCDFF,#1A1A33);*/
+}
+
+Label {
+	-fx-text-fill: #EFEFFFFF;
+	-fx-border-width: 1px;
+	-fx-border-style: solid;
+	-fx-border-color: red;
+}
+
+SlidingPane {
+	-fx-background-color: #00000090;
+}
+
+.transparent {
+	-fx-background-color: transparent;
+}

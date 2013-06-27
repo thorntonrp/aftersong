@@ -36,11 +36,11 @@
 		<dependency>
 			<groupId>org.aftersong</groupId>
 			<artifactId>aftersong-collections</artifactId>
-		</dependency><!--
+		</dependency>
 		<dependency>
 			<groupId>org.aftersong</groupId>
-			<artifactId>aftersong-core</artifactId>
-		</dependency>
+			<artifactId>aftersong-io</artifactId>
+		</dependency><!--
 		<dependency>
 			<groupId>org.testng</groupId>
 			<artifactId>testng</artifactId>

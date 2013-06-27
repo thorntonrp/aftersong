@@ -8,15 +8,20 @@ import javafx.animation.TranslateTransition;
 import javafx.application.Platform;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.util.Duration;
 
@@ -28,83 +33,115 @@ public class SlidingBorderPane extends AnchorPane {
 
 	private static final double MARGIN = 15;
 
-	private ObjectProperty<Node> left;
-	private ObjectProperty<Node> right;
-	private ObjectProperty<Node> top;
-	private ObjectProperty<Node> bottom;
-	private ObjectProperty<Node> center;
+	private ObjectProperty<Node> leftProperty;
+	private ObjectProperty<Node> rightProperty;
+	private ObjectProperty<Node> topProperty;
+	private ObjectProperty<Node> bottomProperty;
+	private ObjectProperty<Node> centerProperty;
 
-	private VBox leftPane;
-	private VBox rightPane;
-	private HBox topPane;
-	private HBox bottomPane;
+	private ObjectProperty<Image> backgroundImageProperty;
+
+	private SlidingPane leftSlidingPane;
+	private SlidingPane rightSlidingPane;
+	private SlidingPane topSlidingPane;
+	private SlidingPane bottomSlidingPane;
+
 	private Pane centerPane;
+	private ImageView backgroundImageView;
 
 	private final MouseEnteredHandler mouseEnteredHandler;
 	private final MouseExitedHandler mouseExitedHandler;
+	private final WidthChangeHandler widthChangeHandler;
+	private final HeightChangeHandler heightChangeHandler;
 
 	public SlidingBorderPane() {
 		mouseEnteredHandler = new MouseEnteredHandler();
-		mouseExitedHandler = new MouseExitedHandler();
+		mouseExitedHandler  = new MouseExitedHandler();
+		widthChangeHandler  = new WidthChangeHandler();
+		heightChangeHandler = new HeightChangeHandler();
 
-		leftPane   = new VBox(10);
-		rightPane  = new VBox(10);
-		topPane    = new HBox(10);
-		bottomPane = new HBox(10);
-		centerPane = new Pane();
+		leftSlidingPane   = new SlidingPane(Position.LEFT);
+		rightSlidingPane  = new SlidingPane(Position.RIGHT);
+		topSlidingPane    = new SlidingPane(Position.TOP);
+		bottomSlidingPane = new SlidingPane(Position.BOTTOM);
 
-		add(leftPane,    true,   0d,   0d,   0d, null);
-		add(topPane,     true,   0d,   0d, null,   0d);
-		add(rightPane,   true,   0d, null,   0d,   0d);
-		add(bottomPane,  true, null,   0d,   0d,   0d);
-		add(centerPane, false,   0d,   0d,   0d,   0d);
+		addSlidingPanes(topSlidingPane, rightSlidingPane, bottomSlidingPane, leftSlidingPane);
+
+		centerPane = new StackPane();
+		getChildren().add(centerPane);
+		layout(centerPane, 0d, 0d, 0d, 0d);
 
 		Platform.runLater(new Runnable() {
 			@Override
 			public void run() {
-				leftPane.setTranslateX(-leftPane.getWidth() + MARGIN);
-				rightPane.setTranslateX(rightPane.getWidth() - MARGIN);
-				topPane.setTranslateY(-topPane.getHeight() + MARGIN);
-				bottomPane.setTranslateY(topPane.getHeight() - MARGIN);
-				Transforms.centerInParent(center.get());
-				makeTransparent(leftPane, rightPane, topPane, bottomPane);
+				leftSlidingPane.setTranslateX(-leftSlidingPane.getWidth() + MARGIN);
+				rightSlidingPane.setTranslateX(rightSlidingPane.getWidth() - MARGIN);
+				topSlidingPane.setTranslateY(-topSlidingPane.getHeight() + MARGIN);
+				bottomSlidingPane.setTranslateY(topSlidingPane.getHeight() - MARGIN);
+				Node centerNode = centerProperty().get();
+				if (centerNode != null) {
+					Transforms.centerInParent(centerNode);
+				}
+				makeTransparent(leftSlidingPane, rightSlidingPane, topSlidingPane, bottomSlidingPane);
 			}
 		});
 	}
 
 	public ObjectProperty<Node> leftProperty() {
-		if (left == null) {
-			left = createBorderNodeProperty("left");
+		if (leftProperty == null) {
+			leftProperty = createBorderNodeProperty(Position.LEFT);
 		}
-		return left;
+		return leftProperty;
 	}
 
 	public ObjectProperty<Node> rightProperty() {
-		if (right == null) {
-			right = createBorderNodeProperty("right");
+		if (rightProperty == null) {
+			rightProperty = createBorderNodeProperty(Position.RIGHT);
 		}
-		return right;
+		return rightProperty;
 	}
 
 	public ObjectProperty<Node> topProperty() {
-		if (top == null) {
-			top = createBorderNodeProperty("top");
+		if (topProperty == null) {
+			topProperty = createBorderNodeProperty(Position.TOP);
 		}
-		return top;
+		return topProperty;
 	}
 
 	public ObjectProperty<Node> bottomProperty() {
-		if (bottom == null) {
-			bottom = createBorderNodeProperty("bottom");
+		if (bottomProperty == null) {
+			bottomProperty = createBorderNodeProperty(Position.BOTTOM);
 		}
-		return bottom;
+		return bottomProperty;
 	}
 
 	public ObjectProperty<Node> centerProperty() {
-		if (center == null) {
-			center = createBorderNodeProperty("center");
+		if (centerProperty == null) {
+			centerProperty = createBorderNodeProperty(Position.CENTER);
 		}
-		return center;
+		return centerProperty;
+	}
+
+	public ObjectProperty<Image> backgroundImageProperty() {
+		if (backgroundImageProperty == null) {
+			backgroundImageProperty = new SimpleObjectProperty<Image>(this, "backgroundImage") {
+
+				@Override
+				public void set(Image image) {
+					if (backgroundImageView != null) {
+						getChildren().remove(backgroundImageView);
+					}
+					backgroundImageView = new ImageView(image);
+					widthProperty().addListener(widthChangeHandler);
+					heightProperty().addListener(heightChangeHandler);
+					getChildren().add(backgroundImageView);
+					layout(backgroundImageView, 0d, 0d, 0d, 0d);
+					backgroundImageView.toBack();
+					super.set(image);
+				}
+			};
+		}
+		return backgroundImageProperty;
 	}
 
 	public Node getLeft() {
@@ -147,37 +184,106 @@ public class SlidingBorderPane extends AnchorPane {
 		centerProperty().set(node);
 	}
 
+	public Image getBackgroundImage() {
+		return backgroundImageProperty().get();
+	}
+
+	public void setBackgroundImage(Image image) {
+		backgroundImageProperty().set(image);
+	}
+
 	private void makeTransparent(Node... nodes) {
 		for (Node node : nodes) {
-			node.setStyle("-fx-background-color: transparent;");
+			node.getStyleClass().add("transparent");
 			node.toFront();
 		}
 	}
 
 	private void makeOpaque(Node... nodes) {
 		for (Node node : nodes) {
-			node.setStyle("-fx-background-color: #EFEFEFFF;");
+			node.getStyleClass().remove("transparent");
 			node.toFront();
 		}
 	}
 
-	private void add(Node node, boolean sliding, Double top, Double left, Double bottom, Double right) {
-		getChildren().add(node);
-		if (sliding) {
+	private static void layout(Node node, Double top, Double right, Double bottom, Double left) {
+		AnchorPane.setTopAnchor(node, top);
+		AnchorPane.setRightAnchor(node, right);
+		AnchorPane.setBottomAnchor(node, bottom);
+		AnchorPane.setLeftAnchor(node, left);
+	}
+
+	private void addSlidingPanes(Node... nodes) {
+		for (Node node : nodes) {
+			getChildren().add(node);
 			mouseEnteredHandler.appendTo(node.onMouseEnteredProperty());
 			mouseExitedHandler.appendTo(node.onMouseExitedProperty());
 		}
-		if (top != null) {
-			AnchorPane.setTopAnchor(node, top);
+	}
+
+	private ObjectProperty<Node> createBorderNodeProperty(final Position position) {
+		return new SimpleObjectProperty<Node>(this, position.name().toLowerCase()) {
+
+			@Override
+			public void set(Node node) {
+				switch (position) {
+					case LEFT:
+						leftSlidingPane.getContentPane().getChildren().clear();
+						if (node != null) {
+							leftSlidingPane.getContentPane().getChildren().add(node);
+							VBox.setMargin(node, new Insets(MARGIN, MARGIN, MARGIN, MARGIN));
+							VBox.setVgrow(node, Priority.ALWAYS);
+						}
+						break;
+					case TOP:
+						topSlidingPane.getContentPane().getChildren().clear();
+						if (node != null) {
+							topSlidingPane.getContentPane().getChildren().add(node);
+							HBox.setMargin(node, new Insets(MARGIN, MARGIN, MARGIN, MARGIN));
+							HBox.setHgrow(node, Priority.ALWAYS);
+						}
+						break;
+					case RIGHT:
+						rightSlidingPane.getContentPane().getChildren().clear();
+						if (node != null) {
+							rightSlidingPane.getContentPane().getChildren().add(node);
+							VBox.setMargin(node, new Insets(MARGIN, MARGIN, MARGIN, MARGIN));
+							VBox.setVgrow(node, Priority.ALWAYS);
+						}
+						break;
+					case BOTTOM:
+						bottomSlidingPane.getContentPane().getChildren().clear();
+						if (node != null) {
+							bottomSlidingPane.getContentPane().getChildren().add(node);
+							HBox.setMargin(node, new Insets(MARGIN, MARGIN, MARGIN, MARGIN));
+							HBox.setHgrow(node, Priority.ALWAYS);
+						}
+						break;
+					case CENTER:
+						centerPane.getChildren().clear();
+						if (node != null) {
+							centerPane.getChildren().add(node);
+						}
+						break;
+				}
+				super.set(node);
+			}
+		};
+	}
+
+	private class WidthChangeHandler implements ChangeListener<Number> {
+
+		@Override
+		public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+			backgroundImageView.setFitWidth(newValue.doubleValue());
 		}
-		if (left != null) {
-			AnchorPane.setLeftAnchor(node, left);
-		}
-		if (bottom != null) {
-			AnchorPane.setBottomAnchor(node, bottom);
-		}
-		if (right != null) {
-			AnchorPane.setRightAnchor(node, right);
+	}
+
+	private class HeightChangeHandler implements ChangeListener<Number> {
+
+		@Override
+		public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+			backgroundImageView.setFitHeight(newValue.doubleValue());
 		}
 	}
 
@@ -189,7 +295,7 @@ public class SlidingBorderPane extends AnchorPane {
 
 			TranslateTransition hideTransition = new TranslateTransition();
 			hideTransition.setNode(node);
-			hideTransition.setDuration(new Duration(200));
+			hideTransition.setDuration(new Duration(100));
 			hideTransition.setOnFinished(new EventHandler<ActionEvent>() {
 				@Override
 				public void handle(ActionEvent event) {
@@ -200,16 +306,16 @@ public class SlidingBorderPane extends AnchorPane {
 			double width = node.getBoundsInLocal().getWidth();
 			double height = node.getBoundsInLocal().getHeight();
 
-			if (node == leftPane) {
+			if (node == leftSlidingPane) {
 				hideTransition.setToX(-width + MARGIN);
 				hideTransition.setToY(0);
-			} else if (node == rightPane) {
+			} else if (node == rightSlidingPane) {
 				hideTransition.setToX(width - MARGIN);
 				hideTransition.setToY(0);
-			} else if (node == topPane) {
+			} else if (node == topSlidingPane) {
 				hideTransition.setToX(0);
 				hideTransition.setToY(-height + MARGIN);
-			} else if (node == bottomPane) {
+			} else if (node == bottomSlidingPane) {
 				hideTransition.setToX(0);
 				hideTransition.setToY(height - MARGIN);
 			}
@@ -228,7 +334,7 @@ public class SlidingBorderPane extends AnchorPane {
 
 			TranslateTransition showTransition = new TranslateTransition();
 			showTransition.setNode(node);
-			showTransition.setDuration(new Duration(200));
+			showTransition.setDuration(new Duration(100));
 			showTransition.setToX(0);
 			showTransition.setToY(0);
 			showTransition.play();
@@ -239,45 +345,5 @@ public class SlidingBorderPane extends AnchorPane {
 				}
 			});
 		}
-	}
-
-	private ObjectProperty<Node> createBorderNodeProperty(final String position) {
-		return new SimpleObjectProperty<Node>(this, position) {
-
-			@Override
-			public void set(Node node) {
-				switch (position) {
-					case "left":
-						leftPane.getChildren().clear();
-						leftPane.getChildren().add(node);
-						VBox.setMargin(node, new Insets(MARGIN, MARGIN, MARGIN, MARGIN));
-						VBox.setVgrow(node, Priority.ALWAYS);
-						break;
-					case "top":
-						topPane.getChildren().clear();
-						topPane.getChildren().add(node);
-						HBox.setMargin(node, new Insets(MARGIN, MARGIN, MARGIN, MARGIN));
-						HBox.setHgrow(node, Priority.ALWAYS);
-						break;
-					case "right":
-						rightPane.getChildren().clear();
-						rightPane.getChildren().add(node);
-						VBox.setMargin(node, new Insets(MARGIN, MARGIN, MARGIN, MARGIN));
-						VBox.setVgrow(node, Priority.ALWAYS);
-						break;
-					case "bottom":
-						bottomPane.getChildren().clear();
-						bottomPane.getChildren().add(node);
-						HBox.setMargin(node, new Insets(MARGIN, MARGIN, MARGIN, MARGIN));
-						HBox.setHgrow(node, Priority.ALWAYS);
-						break;
-					case "center":
-						centerPane.getChildren().clear();
-						centerPane.getChildren().add(node);
-						break;
-				}
-				super.set(node);
-			}
-		};
 	}
 }
