@@ -17,5 +17,9 @@ public class Maps {
 		return new HashMap<>();
 	}
 
+	public static <K, V> Map<K, V> newLinkedMap() {
+		return new HashMap<>();
+	}
+
 	protected Maps() {}
 }
