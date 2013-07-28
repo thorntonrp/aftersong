@@ -9,11 +9,16 @@ import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.List;
 
+import org.aftersong.logging.Log;
+import org.aftersong.logging.Logger;
+
 /**
  *
  * @author Robert P. Thornton
  */
 public class PathSearch {
+
+	private static final Logger LOG = Log.getLogger();
 
 	/**
 	 * Finds files by file extension, starting from the supplied path.
@@ -31,6 +36,7 @@ public class PathSearch {
 		FileExtensionHandler<String> handler = new FileExtensionHandler<String>(extensions) {
 			@Override
 			protected String process(Path file, String fileExtension) {
+				LOG.fine("Adding {0} ...", file);
 				return file.toUri().toString();
 			}
 		};
