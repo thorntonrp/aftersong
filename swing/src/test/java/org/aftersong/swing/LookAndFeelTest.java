@@ -61,7 +61,7 @@ public class LookAndFeelTest {
 			}
 		}).start();
 
-		Threads.sleep(1000);
+		Threads.sleep(2000);
 
 		JDialog dialog = findComponent(Window.getWindows(), JDialog.class);
 		assertNotNull(dialog);
