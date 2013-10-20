@@ -1,0 +1,331 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+		 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>org.aftersong</groupId>
+	<artifactId>aftersong</artifactId>
+	<version>1.0-SNAPSHOT</version>
+	<packaging>pom</packaging>
+
+	<name>${project.artifactId}</name>
+	<url>${platformUrl}${modulePath}</url>
+	<description>
+		A parent POM for APIs developed upon the Aftersong platform. This POM
+		supplies property defaults, plug-in management, and dependency
+		management for external libraries to be integrated into the platform.
+		This is the parent POM for all aftersong modules
+	</description>
+
+	<prerequisites>
+		<maven>3</maven>
+	</prerequisites>
+
+	<properties>
+		<platformUrl>http://github.com/thorntonrp/aftersong/tree/master</platformUrl>
+		<modulePath>/</modulePath>
+
+		<!-- custom properties -->
+		<jdkVersion>1.7</jdkVersion>
+		<platformPackage>org.aftersong</platformPackage>
+		<platformPrefix>aftersong</platformPrefix>
+		<platformVersion>1.0-SNAPSHOT</platformVersion>
+
+		<!-- general maven properties -->
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+		<!-- IDE properties -->
+		<netbeans.hint.jdkPlatform>JDK_${jdkVersion}</netbeans.hint.jdkPlatform>
+
+		<!-- compiler properties -->
+		<maven.compiler.source>${jdkVersion}</maven.compiler.source>
+		<maven.compiler.target>${jdkVersion}</maven.compiler.target>
+		<maven.compiler.showDeprecation>true</maven.compiler.showDeprecation>
+		<maven.compiler.showWarning>true</maven.compiler.showWarning>
+
+		<!-- managed dependency versions -->
+		<cglibVersion>3.0</cglibVersion>
+		<javaxInjectVersion>1</javaxInjectVersion>
+		<springFrameworkVersion>3.2.4.RELEASE</springFrameworkVersion>
+		<testngVersion>6.8.5</testngVersion>
+
+		<!-- managed plugin versions -->
+		<mavenCompilerVersion>3.1</mavenCompilerVersion>
+		<mavenDependencyPluginVersion>2.8</mavenDependencyPluginVersion>
+		<mavenFailsafePluginVersion>2.16</mavenFailsafePluginVersion>
+		<mavenSurefirePluginVersion>2.16</mavenSurefirePluginVersion>
+		<execMavenPluginVersion>1.2.1</execMavenPluginVersion>
+	</properties>
+
+	<modules>
+		<module>collections</module>
+		<module>core</module>
+		<module>io</module>
+		<module>launcher</module>
+		<module>javafx</module>
+		<module>logging</module>
+		<module>swing</module>
+		<module>validation</module>
+	</modules>
+
+	<build>
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>org.codehaus.mojo</groupId>
+					<artifactId>exec-maven-plugin</artifactId>
+					<version>${execMavenPluginVersion}</version>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-compiler-plugin</artifactId>
+					<version>${mavenCompilerVersion}</version>
+					<inherited>true</inherited>
+					<configuration>
+						<encoding>${project.build.sourceEncoding}</encoding>
+						<source>${maven.compiler.source}</source>
+						<showDeprecation>${maven.compiler.showDeprecation}</showDeprecation>
+						<showWarnings>${maven.compiler.showWarnings}</showWarnings>
+						<target>${maven.compiler.target}</target>
+						<compilerArguments>
+							<bootclasspath>${sun.boot.class.path}${path.separator}${java.home}/lib/jfxrt.jar</bootclasspath>
+						</compilerArguments>
+					</configuration>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-dependency-plugin</artifactId>
+					<version>${mavenDependencyPluginVersion}</version>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-surefire-plugin</artifactId>
+					<version>2.15</version>
+					<inherited>true</inherited>
+					<configuration>
+						<argLine>-Djava.util.logging.config.file=src/test/resources/logging.properties</argLine>
+					</configuration>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-failsafe-plugin</artifactId>
+					<version>${mavenFailsafePluginVersion}</version>
+					<inherited>true</inherited>
+					<configuration>
+						<argLine>-Djava.util.logging.config.file=src/test/resources/logging.properties</argLine>
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+	</build>
+
+	<dependencyManagement>
+		<dependencies>
+
+			<!-- TestNG Dependency -->
+			<dependency>
+				<groupId>org.testng</groupId>
+				<artifactId>testng</artifactId>
+				<version>${testngVersion}</version>
+				<scope>test</scope>
+				<exclusions>
+					<exclusion>
+						<groupId>junit</groupId>
+						<artifactId>junit</artifactId>
+					</exclusion>
+					<exclusion>
+						<groupId>org.yaml</groupId>
+						<artifactId>snakeyaml</artifactId>
+					</exclusion>
+				</exclusions>
+			</dependency>
+
+			<!-- BEGIN Spring Dependencies -->
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-aop</artifactId>
+				<version>${springFrameworkVersion}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-aspects</artifactId>
+				<version>${springFrameworkVersion}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-beans</artifactId>
+				<version>${springFrameworkVersion}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-context</artifactId>
+				<version>${springFrameworkVersion}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-context-support</artifactId>
+				<version>${springFrameworkVersion}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-core</artifactId>
+				<version>${springFrameworkVersion}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-expression</artifactId>
+				<version>${springFrameworkVersion}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-instrument</artifactId>
+				<version>${springFrameworkVersion}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-instrument-tomcat</artifactId>
+				<version>${springFrameworkVersion}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-jdbc</artifactId>
+				<version>${springFrameworkVersion}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-jms</artifactId>
+				<version>${springFrameworkVersion}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-orm</artifactId>
+				<version>${springFrameworkVersion}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-oxm</artifactId>
+				<version>${springFrameworkVersion}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-struts</artifactId>
+				<version>${springFrameworkVersion}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-test</artifactId>
+				<version>${springFrameworkVersion}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-tx</artifactId>
+				<version>${springFrameworkVersion}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-web</artifactId>
+				<version>${springFrameworkVersion}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-webmvc</artifactId>
+				<version>${springFrameworkVersion}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-webmvc-portlet</artifactId>
+				<version>${springFrameworkVersion}</version>
+			</dependency>
+			<!-- /END Spring Dependencies -->
+
+			<dependency>
+				<groupId>javax.inject</groupId>
+				<artifactId>javax.inject</artifactId>
+				<version>${javaxInjectVersion}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>javafx</groupId>
+				<artifactId>javafx-runtime</artifactId>
+				<version>2.2</version>
+				<scope>system</scope>
+				<systemPath>${java.home}/lib/jfxrt.jar</systemPath>
+			</dependency>
+
+		</dependencies>
+	</dependencyManagement>
+
+	<profiles>
+		<profile>
+			<id>javafx-executable</id>
+			<activation>
+				<property>
+					<name>javafx.executable</name>
+					<value>true</value>
+				</property>
+			</activation>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-dependency-plugin</artifactId>
+						<version>${mavenDependencyPluginVersion}</version>
+						<executions>
+							<execution>
+								<id>unpack-dependencies</id>
+								<phase>package</phase>
+								<goals>
+									<goal>unpack-dependencies</goal>
+								</goals>
+								<configuration>
+									<excludeScope>system</excludeScope>
+									<excludeGroupIds>junit,org.mockito,org.hamcrest</excludeGroupIds>
+									<outputDirectory>${project.build.directory}/classes</outputDirectory>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+					<plugin>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>exec-maven-plugin</artifactId>
+						<executions>
+							<execution>
+								<id>unpack-dependencies</id>
+								<phase>package</phase>
+								<goals>
+									<goal>exec</goal>
+								</goals>
+								<configuration>
+									<executable>${java.home}/../bin/javafxpackager</executable>
+									<arguments>
+										<argument>-createjar</argument>
+										<argument>-nocss2bin</argument>
+										<argument>-appclass</argument>
+										<argument>${mainClass}</argument>
+										<argument>-srcdir</argument>
+										<argument>${project.build.directory}/classes</argument>
+										<argument>-outdir</argument>
+										<argument>${project.build.directory}</argument>
+										<argument>-outfile</argument>
+										<argument>${project.build.finalName}.jar</argument>
+									</arguments>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-compiler-plugin</artifactId>
+						<configuration>
+							<compilerArguments>
+								<bootclasspath>${sun.boot.class.path}${path.separator}${java.home}/lib/jfxrt.jar</bootclasspath>
+							</compilerArguments>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
+</project>

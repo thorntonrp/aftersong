@@ -1,0 +1,35 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+		 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+	<parent>
+		<groupId>org.aftersong</groupId>
+		<artifactId>aftersong-logging</artifactId>
+		<version>1.0-SNAPSHOT</version>
+	</parent>
+
+	<modelVersion>4.0.0</modelVersion>
+	<artifactId>aftersong-logging-api</artifactId>
+	<packaging>jar</packaging>
+
+	<name>${project.artifactId}</name>
+	<url>${platformUrl}${modulePath}</url>
+	<description>
+		A logging API designed to be as clean and unobtrusive as possible.
+		Providing an interface with the same method signatures as the standard
+		Java Logging API, it can be a simple drop-in replacement for standard
+		Java logging that provides additional operations that keep the most
+		common logging operations simple, unobtrusive, and clutter free.
+	</description>
+
+	<properties>
+		<modulePath>/logging/api</modulePath>
+	</properties>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.testng</groupId>
+			<artifactId>testng</artifactId>
+		</dependency>
+	</dependencies>
+</project>
