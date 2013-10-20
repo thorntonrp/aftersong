@@ -12,3 +12,16 @@
 /examples/javafx-fxml-app/target/
 /examples/launcher-app/target/
 /examples/spring-app/target/
+/applications/pixie-nb/nbproject/private/
+/applications/pixie-nb/build/
+/modules/logging/api/target/
+/modules/logging/jul/target/
+/modules/collections/target/
+/modules/core/target/
+/modules/io/target/
+/modules/launcher/example/target/
+/modules/launcher/maven-plugin/target/
+/modules/launcher/packager/target/
+/modules/javafx/target/
+/modules/swing/target/
+/modules/logging/jdk/target/
