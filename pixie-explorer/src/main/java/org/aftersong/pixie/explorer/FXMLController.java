@@ -46,8 +46,7 @@ public class FXMLController implements Initializable {
 		});
 
 		final File pictures = new File(System.getProperty("user.home"), "Pictures");
-		File folder = pictures;
-		File[] files = folder.listFiles(new FileFilter() {
+		File[] files = pictures.listFiles(new FileFilter() {
 			@Override
 			public boolean accept(File pathname) {
 				return pathname.getName().matches("(?i).*\\.(jpg|png|bmp|gif)");
